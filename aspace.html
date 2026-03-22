@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASpace – Find Rentals in Albay</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+ <a href="#" class="nav-brand" onclick="showPage('home');return false;">
+  <img src="Aspacelogo2.png" alt="ASpace" style="height:42px;width:auto;object-fit:contain;display:block;"/>
+</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#" class="nav-link" onclick="showPage('home');scrollToId('listings');return false;">Find Rentals</a>
+      <a href="#" class="nav-link" onclick="showPage('about');return false;">About Us</a>
+      <a href="#" class="nav-link" onclick="showPage('howitworks');return false;">How It Works</a>
+      <a href="#" class="nav-link" onclick="showPage('dashboard');return false;">Post My Property</a>
+      <button class="btn-nav-account" onclick="openModal('loginModal')">
+        <i class="fa-regular fa-circle-user"></i> Account
+      </button>
+    </nav>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="app">
+
+<!-- PAGE: HOME -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <span class="hero-pill"><i class="fa-solid fa-building"></i> Albay's Trusted Rental Platform</span>
+      <h1 class="hero-heading">Find a Space<br/><em>(Apartment, Dorm, Boarding House, Bedspace)</em><br/>with <span class="brand-highlight">ASpace</span></h1>
+      <p class="hero-sub">Discover safe &amp; verified rentals in Legazpi City, Daraga, Ligao, Tabaco, and all across Albay.</p>
+
+      <div class="search-container">
+        <div class="search-bar">
+          <div class="sb-field grow">
+            <i class="fa-solid fa-magnifying-glass sb-ico"></i>
+            <input type="text" id="heroSearch" placeholder="Search location or listing name..."/>
+          </div>
+          <div class="sb-field">
+            <i class="fa-solid fa-house sb-ico"></i>
+            <select id="heroType" onchange="toggleGenderFilter()">
+              <option value="">All Types</option>
+              <option>Apartment</option>
+              <option>Dormitory</option>
+              <option>Boarding House</option>
+              <option>Bedspace</option>
+            </select>
+          </div>
+          <div class="sb-field">
+            <i class="fa-solid fa-location-dot sb-ico"></i>
+            <select id="heroCity">
+              <option value="">All Cities</option>
+              <option>Legazpi City</option>
+              <option>Daraga</option>
+              <option>Ligao</option>
+              <option>Tabaco</option>
+              <option>Sto. Domingo</option>
+            </select>
+          </div>
+          <button class="btn-filter-toggle" id="filterToggleBtn" onclick="toggleAdvancedFilters()" title="More filters">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Filters</span>
+            <span class="filter-badge hidden" id="filterBadge">0</span>
+          </button>
+          <button class="btn-search" onclick="doHeroSearch()">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+          </button>
+        </div>
+
+        <!-- Advanced Filter Panel -->
+        <div class="adv-filter-panel" id="advFilterPanel">
+          <div class="afp-inner">
+
+            <!-- Price Range -->
+            <div class="afp-group">
+              <p class="afp-group-label"><i class="fa-solid fa-peso-sign"></i> Price Range</p>
+              <div class="afp-radio-group">
+                <label class="afp-radio"><input type="radio" name="pricePref" value="" onchange="applyFilters()" checked><i class="fa-solid fa-infinity"></i> Any Price</label>
+                <label class="afp-radio"><input type="radio" name="pricePref" value="0-2000" onchange="applyFilters()"><i class="fa-solid fa-arrow-down"></i> Under &#8369;2,000</label>
+                <label class="afp-radio"><input type="radio" name="pricePref" value="2000-4000" onchange="applyFilters()"><i class="fa-solid fa-minus"></i> &#8369;2k &ndash; &#8369;4k</label>
+                <label class="afp-radio"><input type="radio" name="pricePref" value="4000-7000" onchange="applyFilters()"><i class="fa-solid fa-minus"></i> &#8369;4k &ndash; &#8369;7k</label>
+                <label class="afp-radio"><input type="radio" name="pricePref" value="7000-99999" onchange="applyFilters()"><i class="fa-solid fa-arrow-up"></i> &#8369;7,000+</label>
+              </div>
+            </div>
+
+            <!-- Amenities -->
+            <div class="afp-group">
+              <p class="afp-group-label"><i class="fa-solid fa-star"></i> Amenities</p>
+              <div class="afp-checks">
+                <label class="afp-check"><input type="checkbox" value="Wi-Fi" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-wifi"></i> Wi-Fi</label>
+                <label class="afp-check"><input type="checkbox" value="Air Conditioning" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-snowflake"></i> Aircon</label>
+                <label class="afp-check"><input type="checkbox" value="CR / Bathroom" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-shower"></i> Private Bath</label>
+                <label class="afp-check"><input type="checkbox" value="Furnishings" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-couch"></i> Furnished</label>
+                <label class="afp-check"><input type="checkbox" value="Parking" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-square-parking"></i> Parking</label>
+                <label class="afp-check"><input type="checkbox" value="CCTV" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-shield-halved"></i> CCTV/Security</label>
+                <label class="afp-check"><input type="checkbox" value="Kitchen" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-kitchen-set"></i> Kitchen</label>
+                <label class="afp-check"><input type="checkbox" value="Laundry" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-soap"></i> Laundry</label>
+                <label class="afp-check"><input type="checkbox" value="Meals" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-utensils"></i> Meals Incl.</label>
+                <label class="afp-check"><input type="checkbox" value="Water" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-droplet"></i> Water Incl.</label>
+                <label class="afp-check"><input type="checkbox" value="Electricity" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-bolt"></i> Electricity</label>
+                <label class="afp-check"><input type="checkbox" value="24-hr Guard" data-filter="amenity" onchange="applyFilters()"><i class="fa-solid fa-user-shield"></i> 24hr Guard</label>
+              </div>
+            </div>
+
+            <!-- Gender Preference (hidden for Apartments) -->
+            <div class="afp-group" id="genderFilterGroup">
+              <p class="afp-group-label"><i class="fa-solid fa-venus-mars"></i> Gender Preference <span class="afp-note">(Dorm, Boarding &amp; Bedspace only)</span></p>
+              <div class="afp-radio-group">
+                <label class="afp-radio"><input type="radio" name="genderPref" value="" onchange="applyFilters()" checked><i class="fa-solid fa-people-group"></i> Any</label>
+                <label class="afp-radio"><input type="radio" name="genderPref" value="Male Only" onchange="applyFilters()"><i class="fa-solid fa-mars"></i> Male Only</label>
+                <label class="afp-radio"><input type="radio" name="genderPref" value="Female Only" onchange="applyFilters()"><i class="fa-solid fa-venus"></i> Female Only</label>
+                <label class="afp-radio"><input type="radio" name="genderPref" value="Mixed" onchange="applyFilters()"><i class="fa-solid fa-venus-mars"></i> Mixed</label>
+              </div>
+            </div>
+
+            <div class="afp-footer">
+              <button class="afp-clear-btn" onclick="clearAdvancedFilters()">
+                <i class="fa-solid fa-rotate-left"></i> Reset all filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="search-pills">
+          <span class="sp-label">Popular:</span>
+          <button class="sp-tag" onclick="setCity('Legazpi City')">Legazpi City</button>
+          <button class="sp-tag" onclick="setCity('Daraga')">Daraga</button>
+          <button class="sp-tag" onclick="setCity('Ligao')">Ligao</button>
+          <button class="sp-tag" onclick="setCity('Tabaco')">Tabaco</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hstat"><strong>500+</strong><span>Verified Listings</span></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><strong>5 Cities</strong><span>Across Albay</span></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><strong>100%</strong><span>Scam-Protected</span></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><strong>24/7</strong><span>Customer Support</span></div>
+    </div>
+  </section>
+
+  <!-- EXPLORE RENTALS -->
+  <section class="section" id="listings">
+    <div class="section-top">
+      <div>
+        <p class="section-label">Browse Properties</p>
+        <h2 class="section-title">Explore Rentals in Albay</h2>
+      </div>
+      <div class="filter-pills" id="filterPills">
+        <button class="fp active" data-f="all">All</button>
+        <button class="fp" data-f="Apartment">Apartment</button>
+        <button class="fp" data-f="Dormitory">Dormitory</button>
+        <button class="fp" data-f="Boarding House">Boarding</button>
+        <button class="fp" data-f="Bedspace">Bedspace</button>
+      </div>
+    </div>
+    <div class="results-bar" id="resultsBar">
+      <span id="resultsCount"><i class="fa-solid fa-layer-group"></i> Showing all 10 listings</span>
+      <button class="results-clear hidden" id="resultsClear" onclick="clearSearch()">
+        <i class="fa-solid fa-xmark"></i> Clear filters
+      </button>
+    </div>
+    <div class="listings-grid" id="listingsGrid"></div>
+    <div class="load-more-wrap">
+      <button class="btn-outline" id="loadMoreBtn" onclick="loadMore()">
+        <i class="fa-solid fa-chevron-down"></i> Load More Listings
+      </button>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS SNIPPET -->
+  <section class="section bg-light-blue" id="how-snip">
+    <div class="section-top center">
+      <p class="section-label">Simple Process</p>
+      <h2 class="section-title">How ASpace Works</h2>
+      <p class="section-sub">5 easy steps to find your perfect space in Albay.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-item"><div class="step-ico"><i class="fa-solid fa-magnifying-glass"></i></div><div class="step-n">1</div><h4>Search for a Space</h4><p>Use our smart filters to find the right listing.</p></div>
+      <div class="step-arr"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="step-item"><div class="step-ico"><i class="fa-regular fa-message"></i></div><div class="step-n">2</div><h4>Inquire with Landlord</h4><p>Message verified landlords securely in-app.</p></div>
+      <div class="step-arr"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="step-item"><div class="step-ico"><i class="fa-regular fa-calendar-check"></i></div><div class="step-n">3</div><h4>Schedule a Visit</h4><p>Book a personal ocular inspection easily.</p></div>
+      <div class="step-arr"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="step-item"><div class="step-ico"><i class="fa-regular fa-file-lines"></i></div><div class="step-n">4</div><h4>Book the Space</h4><p>Confirm your reservation securely.</p></div>
+      <div class="step-arr"><i class="fa-solid fa-chevron-right"></i></div>
+      <div class="step-item"><div class="step-ico"><i class="fa-solid fa-house"></i></div><div class="step-n">5</div><h4>Move In</h4><p>Settle into your verified new home.</p></div>
+    </div>
+    <div class="center-cta"><button class="btn-primary" onclick="showPage('howitworks')">See Full Guide</button></div>
+  </section>
+
+  <!-- WHY ASPACE -->
+  <section class="section">
+    <div class="section-top center">
+      <p class="section-label">Why Choose ASpace</p>
+      <h2 class="section-title">Safe, Verified &amp; Trusted</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-ico blue"><i class="fa-solid fa-shield-halved"></i></div><h4>Scam Protection</h4><p>All listings are verified to prevent fraudulent posts and protect tenants and landlords.</p></div>
+      <div class="why-card"><div class="why-ico lblue"><i class="fa-solid fa-location-dot"></i></div><h4>Albay-Only Focus</h4><p>We exclusively list verified rentals across Legazpi, Daraga, Ligao, Tabaco, and nearby areas.</p></div>
+      <div class="why-card"><div class="why-ico blue"><i class="fa-solid fa-users"></i></div><h4>For Students &amp; Renters</h4><p>Built for students, professionals, and families seeking safe, affordable spaces in Albay.</p></div>
+      <div class="why-card"><div class="why-ico lblue"><i class="fa-solid fa-circle-check"></i></div><h4>Verified Landlords</h4><p>Landlords complete identity verification before their listings go live.</p></div>
+      <div class="why-card"><div class="why-ico blue"><i class="fa-solid fa-mobile-screen-button"></i></div><h4>Easy to Use</h4><p>Clean and mobile-responsive design lets you find, inquire, and book from any device.</p></div>
+      <div class="why-card"><div class="why-ico lblue"><i class="fa-solid fa-headset"></i></div><h4>24/7 Support</h4><p>Our support team is always available to help with any concerns or questions.</p></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials-section">
+    <div class="section-top center">
+      <p class="section-label">What Renters Say</p>
+      <h2 class="section-title">Trusted by Students &amp; Professionals</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="tcard"><div class="tcard-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="tcard-text">"Found my dorm near Bicol University in less than a day. The landlord was verified and the listing details were accurate. ASpace made it so stress-free!"</p><div class="tcard-author"><div class="tcard-avatar"><i class="fa-solid fa-user-graduate"></i></div><div><strong>Mia Bautista</strong><span>BU Student, Daraga</span></div></div></div>
+      <div class="tcard"><div class="tcard-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="tcard-text">"ASpace's verification system gave me the confidence to rent my apartment in Legazpi. No scams, no fake listings — just real, verified properties."</p><div class="tcard-author"><div class="tcard-avatar"><i class="fa-solid fa-briefcase"></i></div><div><strong>Carlo Mendez</strong><span>IT Professional, Legazpi City</span></div></div></div>
+      <div class="tcard"><div class="tcard-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div><p class="tcard-text">"As a nurse in Tabaco, I needed housing fast. ASpace had exactly what I needed and I contacted the landlord directly within hours. Highly recommended!"</p><div class="tcard-author"><div class="tcard-avatar"><i class="fa-solid fa-user-nurse"></i></div><div><strong>Patricia Lim</strong><span>Nurse, Tabaco City</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <div class="cta-banner-inner">
+      <div class="cta-banner-text"><h2>Ready to Find Your Space?</h2><p>Browse verified listings across Albay — apartments, dorms, boarding houses, and bedspaces.</p></div>
+      <div class="cta-banner-actions">
+        <button class="btn-cta-white" onclick="showPage('home');scrollToId('listings')"><i class="fa-solid fa-magnifying-glass"></i> Browse Listings</button>
+        <button class="btn-cta-outline" onclick="openModal('loginModal');setRole('landlord')"><i class="fa-solid fa-plus"></i> Post My Property</button>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+
+<!-- PAGE: ABOUT -->
+<div class="page" id="page-about">
+  <div class="page-banner"><h1>About ASpace</h1><p>Albay's most trusted platform for finding safe, verified rental spaces.</p></div>
+  <section class="section">
+    <div class="about-layout">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=650&q=80" alt="ASpace" class="about-photo"/>
+        <div class="about-float"><strong>Est. 2026</strong><span>Albay, PH</span></div>
+      </div>
+      <div class="about-copy">
+        <p class="section-label">Who We Are</p>
+        <h2 class="section-title">Connecting Renters with Safe Spaces in Albay</h2>
+        <p class="body-text">ASpace (Aspacer) is a digital rental platform built exclusively for Albay, Philippines. We help students, workers, and families find safe, affordable, and verified dormitories, apartments, boarding houses, and bedspaces across Legazpi City, Daraga, Ligao, Tabaco, and nearby municipalities.</p>
+        <p class="body-text">Our platform is equipped with security features that prevent scams and fraudulent listings — so every transaction is transparent, safe, and reliable.</p>
+        <div class="mv-row">
+          <div class="mv-card blue"><div class="mv-head"><div class="mv-ico"><i class="fa-solid fa-bullseye"></i></div><h4>Our Mission</h4></div><p>To offer students and renters in Albay a safe, reliable, and user-friendly platform to discover verified dorms, apartments, and boarding houses, while promoting transparency, convenience, and security in every transaction.</p></div>
+          <div class="mv-card light"><div class="mv-head"><div class="mv-ico"><i class="fa-solid fa-eye"></i></div><h4>Our Vision</h4></div><p>To become Albay's leading trusted platform for finding safe and convenient rental spaces.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section bg-light-blue">
+    <div class="section-top center"><p class="section-label">Our Coverage</p><h2 class="section-title">Serving All of Albay</h2></div>
+    <div class="cities-row">
+      <div class="city-card"><div class="city-ico"><i class="fa-solid fa-city"></i></div><h4>Legazpi City</h4><p>Capital city — highest listings near colleges and business districts.</p></div>
+      <div class="city-card"><div class="city-ico"><i class="fa-solid fa-map-pin"></i></div><h4>Daraga</h4><p>Adjacent to Legazpi, popular for affordable boardinghouses near Bicol University.</p></div>
+      <div class="city-card"><div class="city-ico"><i class="fa-solid fa-house-chimney"></i></div><h4>Ligao City</h4><p>Growing city with budget-friendly dormitories and apartments.</p></div>
+      <div class="city-card"><div class="city-ico"><i class="fa-solid fa-building-columns"></i></div><h4>Tabaco City</h4><p>Northern Albay hub with a growing rental market for students and workers.</p></div>
+      <div class="city-card"><div class="city-ico"><i class="fa-solid fa-water"></i></div><h4>Sto. Domingo</h4><p>Coastal municipality with scenic rental options for families and professionals.</p></div>
+    </div>
+  </section>
+</div>
+
+
+<!-- PAGE: HOW IT WORKS -->
+<div class="page" id="page-howitworks">
+  <div class="page-banner"><h1>How ASpace Works</h1><p>Find your perfect space in Albay in just 5 simple steps.</p></div>
+  <section class="section">
+    <div class="hiw-steps">
+      <div class="hiw-step"><div class="hiw-step-num">01</div><div class="hiw-step-ico"><i class="fa-solid fa-magnifying-glass"></i></div><div class="hiw-step-body"><h3>Search for a Space</h3><p>Use our search bar and smart filters — including price, amenities and gender preference — to find available dormitories, apartments, boarding houses, and bedspaces across Albay.</p></div></div>
+      <div class="hiw-step"><div class="hiw-step-num">02</div><div class="hiw-step-ico"><i class="fa-regular fa-message"></i></div><div class="hiw-step-body"><h3>Inquire with the Landlord</h3><p>Message verified landlords directly through our secure in-platform messaging system. Ask about availability, house rules, and other details before committing.</p></div></div>
+      <div class="hiw-step"><div class="hiw-step-num">03</div><div class="hiw-step-ico"><i class="fa-regular fa-calendar-check"></i></div><div class="hiw-step-body"><h3>Schedule a Visit</h3><p>Book an ocular visit at a time that works for you to personally inspect the property.</p></div></div>
+      <div class="hiw-step"><div class="hiw-step-num">04</div><div class="hiw-step-ico"><i class="fa-regular fa-file-lines"></i></div><div class="hiw-step-body"><h3>Book the Space</h3><p>After your visit, reserve the space through ASpace. Our secure booking system ensures your reservation is protected and payments are handled safely.</p></div></div>
+      <div class="hiw-step"><div class="hiw-step-num">05</div><div class="hiw-step-ico"><i class="fa-solid fa-house"></i></div><div class="hiw-step-body"><h3>Move In</h3><p>Once confirmed and payments settled, you're ready to move into your new verified space. ASpace continues to support you throughout your stay.</p></div></div>
+    </div>
+    <div class="center-cta"><button class="btn-primary" onclick="showPage('home');scrollToId('listings')">Start Searching Now</button></div>
+  </section>
+  <section class="section bg-light-blue">
+    <div class="section-top center"><p class="section-label">For Landlords</p><h2 class="section-title">List Your Property on ASpace</h2></div>
+    <div class="landlord-steps-row">
+      <div class="ls-item"><div class="ls-n">1</div><h4>Create Account</h4><p>Sign up as a landlord and complete identity verification.</p></div>
+      <div class="ls-item"><div class="ls-n">2</div><h4>Post Your Property</h4><p>Fill in property details, upload photos, and set pricing.</p></div>
+      <div class="ls-item"><div class="ls-n">3</div><h4>Receive Inquiries</h4><p>Get messages and visit requests from verified tenants.</p></div>
+      <div class="ls-item"><div class="ls-n">4</div><h4>Confirm &amp; Earn</h4><p>Accept bookings and receive secure payments through ASpace.</p></div>
+    </div>
+    <div class="center-cta"><button class="btn-primary" onclick="showPage('dashboard')">Post My Property</button></div>
+  </section>
+</div>
+
+
+<!-- PAGE: DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="page-banner"><h1>Landlord Dashboard</h1><p>Manage your listings, leads, and messages in one place.</p></div>
+  <section class="section">
+    <div class="dash-layout">
+      <aside class="dash-sidebar">
+        <div class="dash-profile">
+          <div class="dash-avatar"><i class="fa-solid fa-circle-user"></i></div>
+          <div class="dash-pname">My Dashboard</div>
+        </div>
+        <nav class="dash-nav">
+          <button class="dn-btn active" onclick="openPanel('overview',this)"><i class="fa-solid fa-chart-pie"></i> Overview</button>
+          <button class="dn-btn" onclick="openPanel('post',this)"><i class="fa-solid fa-plus"></i> Post Listing</button>
+          <button class="dn-btn" onclick="openPanel('leads',this)"><i class="fa-solid fa-users"></i> Leads</button>
+          <button class="dn-btn" onclick="openPanel('visits',this)"><i class="fa-regular fa-calendar-days"></i> Visit Schedules</button>
+          <button class="dn-btn" onclick="openPanel('messages',this)"><i class="fa-regular fa-comments"></i> Messages</button>
+          <button class="dn-btn" onclick="openPanel('calendar',this)"><i class="fa-regular fa-calendar"></i> Availability</button>
+          <button class="dn-btn" onclick="openPanel('manage',this)"><i class="fa-solid fa-screwdriver-wrench"></i> Manage Workspace</button>
+          <button class="dn-btn" onclick="openPanel('help',this)"><i class="fa-regular fa-circle-question"></i> Help</button>
+        </nav>
+      </aside>
+      <div class="dash-panels">
+        <div class="d-panel active" id="panel-overview">
+          <h3 class="panel-h">Overview</h3>
+          <div class="ov-stats">
+            <div class="ov-s blue"><div class="ov-n">3</div><div class="ov-l">Active Listings</div></div>
+            <div class="ov-s light"><div class="ov-n">12</div><div class="ov-l">New Leads</div></div>
+            <div class="ov-s blue"><div class="ov-n">5</div><div class="ov-l">Visit Requests</div></div>
+            <div class="ov-s light"><div class="ov-n">8</div><div class="ov-l">Messages</div></div>
+          </div>
+          <div class="ov-alert">
+            <div class="ov-alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div><strong>Identity Verification Required</strong><p>Complete verification to activate bookings and receive payments.</p></div>
+            <button class="btn-primary small-btn" onclick="showToast('Redirecting to verification...','fa-id-card')">Verify Now</button>
+          </div>
+        </div>
+        <div class="d-panel" id="panel-post">
+          <h3 class="panel-h">Post a New Listing</h3>
+          <form class="post-form" onsubmit="submitListing(event)">
+            <div class="form-group"><label>Listing Title *</label><input type="text" placeholder="e.g. Studio Apartment near Bicol University" required/></div>
+            <div class="form-2col">
+              <div class="form-group"><label>City / Municipality *</label><select required><option value="">Select City</option><option>Legazpi City</option><option>Daraga</option><option>Ligao</option><option>Tabaco</option><option>Sto. Domingo</option></select></div>
+              <div class="form-group"><label>Property Type *</label><select required><option value="">Select Type</option><option>Apartment</option><option>Dormitory</option><option>Boarding House</option><option>Bedspace</option></select></div>
+            </div>
+            <div class="form-group"><label>Complete Address *</label><input type="text" placeholder="Street, Barangay, City, Albay" required/></div>
+            <div class="form-section-head"><i class="fa-solid fa-tags"></i> Sub-listing &amp; Pricing</div>
+            <div class="form-2col">
+              <div class="form-group"><label>Sub-listing Name</label><input type="text" placeholder="e.g. Room A, Unit 2B"/></div>
+              <div class="form-group"><label>Monthly Rent (&#8369;) *</label><input type="number" placeholder="e.g. 4500" required/></div>
+            </div>
+            <div class="form-2col">
+              <div class="form-group"><label>Good For (persons)</label><input type="text" placeholder="e.g. 1&ndash;2 persons"/></div>
+              <div class="form-group"><label>Gender Preference</label><select><option value="Mixed">Mixed</option><option value="Male Only">Male Only</option><option value="Female Only">Female Only</option></select></div>
+            </div>
+            <div class="form-section-head"><i class="fa-solid fa-star"></i> Rental Features</div>
+            <div class="feat-checks">
+              <label class="fc"><input type="checkbox"/> Wi-Fi Included</label>
+              <label class="fc"><input type="checkbox"/> Air Conditioning</label>
+              <label class="fc"><input type="checkbox"/> Electricity Included</label>
+              <label class="fc"><input type="checkbox"/> Water Included</label>
+              <label class="fc"><input type="checkbox"/> Kitchen Access</label>
+              <label class="fc"><input type="checkbox"/> CR / Bathroom</label>
+              <label class="fc"><input type="checkbox"/> Laundry Area</label>
+              <label class="fc"><input type="checkbox"/> CCTV / Security</label>
+              <label class="fc"><input type="checkbox"/> Parking Space</label>
+              <label class="fc"><input type="checkbox"/> Furnishings Included</label>
+            </div>
+            <div class="form-group"><label>Property Description *</label><textarea rows="5" placeholder="Describe your property..." required></textarea></div>
+            <div class="form-section-head"><i class="fa-solid fa-camera"></i> Photos of the Space</div>
+            <div class="photo-drop" onclick="document.getElementById('pInput').click()">
+              <div class="pd-ico"><i class="fa-solid fa-camera-rotate"></i></div>
+              <p>Click to upload photos <span>(JPG, PNG &mdash; max 10 files)</span></p>
+              <input type="file" id="pInput" multiple accept="image/*" style="display:none" onchange="previewPhotos(event)"/>
+            </div>
+            <div class="photo-row" id="photoRow"></div>
+            <div class="form-submit"><button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Listing for Review</button></div>
+          </form>
+        </div>
+        <div class="d-panel" id="panel-leads"><h3 class="panel-h">Leads</h3><div class="empty-state"><div class="es-ico"><i class="fa-solid fa-users"></i></div><p>No new leads yet. Inquiries will appear here.</p></div></div>
+        <div class="d-panel" id="panel-visits"><h3 class="panel-h">Visit Schedules</h3><div class="empty-state"><div class="es-ico"><i class="fa-regular fa-calendar-days"></i></div><p>No visit requests yet.</p></div></div>
+        <div class="d-panel" id="panel-messages"><h3 class="panel-h">Messages</h3><div class="empty-state"><div class="es-ico"><i class="fa-regular fa-comments"></i></div><p>No messages yet.</p></div></div>
+        <div class="d-panel" id="panel-calendar"><h3 class="panel-h">Availability Calendar</h3><div class="empty-state"><div class="es-ico"><i class="fa-regular fa-calendar"></i></div><p>Calendar integration coming soon.</p></div></div>
+        <div class="d-panel" id="panel-manage"><h3 class="panel-h">Manage Workspace</h3><div class="empty-state"><div class="es-ico"><i class="fa-solid fa-screwdriver-wrench"></i></div><p>Your active listings will appear here.</p></div></div>
+        <div class="d-panel" id="panel-help">
+          <h3 class="panel-h">Help Center</h3>
+          <div class="help-grid">
+            <div class="help-card"><h4><i class="fa-solid fa-phone"></i> Contact Support</h4><p>Email: Support@Aspace.com<br/>Phone: +63 991 142 5344<br/>Mon&ndash;Sat, 8AM&ndash;6PM</p></div>
+            <div class="help-card"><h4><i class="fa-regular fa-file-lines"></i> FAQs</h4><p>Find answers to common landlord questions about listing, verification, and payments.</p><button class="btn-outline small-btn" onclick="showToast('FAQs coming soon!','fa-circle-info')">View FAQs</button></div>
+            <div class="help-card"><h4><i class="fa-solid fa-book-open"></i> Listing Guidelines</h4><p>Learn about ASpace's rules for posting properties and maintaining quality listings.</p><button class="btn-outline small-btn" onclick="showToast('Guidelines coming soon!','fa-circle-info')">Read Guidelines</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- LEGAL PAGES -->
+<div class="page" id="page-terms">
+  <div class="page-banner"><h1>Terms of Service</h1><p>Last updated: January 2026</p></div>
+  <section class="section"><div class="legal-wrap">
+    <div class="legal-block"><h3>1. Acceptance of Terms</h3><p>By accessing or using ASpace, you agree to be bound by these Terms of Service. If you do not agree, please do not use the platform.</p></div>
+    <div class="legal-block"><h3>2. User Responsibilities</h3><p>Users must provide accurate information when registering. Fraudulent, misleading, or illegal activity is prohibited and will result in account suspension.</p></div>
+    <div class="legal-block"><h3>3. Platform Limitations</h3><p>ASpace facilitates connections between tenants and landlords and is limited to rental listings within Albay, Philippines.</p></div>
+    <div class="legal-block"><h3>4. Content Policy</h3><p>All listed properties must be real, accurate, and compliant with local laws. ASpace reserves the right to remove any listing that violates community guidelines.</p></div>
+    <div class="legal-block"><h3>5. Account Termination</h3><p>ASpace reserves the right to suspend or terminate accounts engaged in fraudulent or harmful activities.</p></div>
+    <div class="legal-block"><h3>6. Limitation of Liability</h3><p>ASpace shall not be held liable for damages arising from transactions between tenants and landlords.</p></div>
+  </div></section>
+</div>
+
+<div class="page" id="page-privacy">
+  <div class="page-banner"><h1>Privacy Policy</h1><p>Last updated: January 2025</p></div>
+  <section class="section"><div class="legal-wrap">
+    <div class="legal-block"><h3>1. Data We Collect</h3><p>We collect personal information such as name, email, mobile number, and property details when you register or post a listing.</p></div>
+    <div class="legal-block"><h3>2. How We Use Your Data</h3><p>Your data is used to facilitate connections between tenants and landlords, provide customer support, and improve our services.</p></div>
+    <div class="legal-block"><h3>3. Data Security</h3><p>We implement industry-standard security measures including encrypted data storage and HTTPS connections.</p></div>
+    <div class="legal-block"><h3>4. Third-Party Sharing</h3><p>ASpace does not sell your personal data. Data may be shared with law enforcement if legally required.</p></div>
+    <div class="legal-block"><h3>5. Your Rights</h3><p>You have the right to access, correct, or delete your personal data by contacting Support@Aspace.com.</p></div>
+    <div class="legal-block"><h3>6. Cookies</h3><p>ASpace uses cookies to improve your browsing experience and analyze platform usage.</p></div>
+  </div></section>
+</div>
+
+<div class="page" id="page-payment">
+  <div class="page-banner"><h1>Payment Policy</h1><p>Last updated: January 2025</p></div>
+  <section class="section"><div class="legal-wrap">
+    <div class="legal-block"><h3>1. Subscription Fee</h3><p>Landlords pay a monthly subscription fee of &#8369;299 to maintain active listings on ASpace.</p></div>
+    <div class="legal-block"><h3>2. Commission</h3><p>ASpace charges a 5% service commission on confirmed bookings made through the platform.</p></div>
+    <div class="legal-block"><h3>3. Accepted Payment Methods</h3><p>ASpace accepts: GCash, Maya (PayMaya), Bank Transfer (BDO, BPI, Metrobank, UnionBank), and Credit/Debit Cards (Visa, Mastercard).</p></div>
+    <div class="legal-block"><h3>4. Refund Policy</h3><p>Subscription fees are non-refundable. Booking deposits may be refunded within 48 hours, subject to landlord approval.</p></div>
+    <div class="legal-block"><h3>5. Payment Disputes</h3><p>For payment concerns, contact Support@Aspace.com with your transaction reference number. We will respond within 3&ndash;5 business days.</p></div>
+  </div></section>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-wrap">
+    <div class="footer-col brand-fc">
+      <a href="#" class="nav-brand white-brand" onclick="showPage('home');return false;">
+        <div class="nav-logo"><svg width="26" height="26" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="url(#fg)"/><path d="M20 8L34 20H28V32H22V26H18V32H12V20H6L20 8Z" fill="white"/><defs><linearGradient id="fg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#1565C0"/><stop offset="1" stop-color="#42A5F5"/></linearGradient></defs></svg></div>
+        <span class="brand-name">ASpace</span>
+      </a>
+      <p class="footer-tag">Albay's trusted digital platform for finding safe, verified dormitories, apartments, and boarding houses.</p>
+      <div class="social-row">
+        <a href="#" class="soc" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" class="soc" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="soc" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="soc" title="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" class="soc" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="#" onclick="showPage('terms');return false;">Terms of Service</a></li>
+        <li><a href="#" onclick="showPage('privacy');return false;">Privacy Policy</a></li>
+        <li><a href="#" onclick="showPage('payment');return false;">Payment Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Platform</h5>
+      <ul>
+        <li><a href="#" onclick="showPage('home');scrollToId('listings');return false;">Find Rentals</a></li>
+        <li><a href="#" onclick="showPage('about');return false;">About Us</a></li>
+        <li><a href="#" onclick="showPage('howitworks');return false;">How It Works</a></li>
+        <li><a href="#" onclick="showPage('dashboard');return false;">Post My Property</a></li>
+      </ul>
+    </div>
+    <div class="footer-col contact-fc">
+      <h5>Customer Support</h5>
+      <ul class="contact-list">
+        <li><i class="fa-regular fa-envelope"></i><a href="mailto:Support@Aspace.com">Support@Aspace.com</a></li>
+        <li><i class="fa-solid fa-location-dot"></i><span>Daraga City, Albay</span></li>
+        <li><i class="fa-solid fa-phone"></i><a href="tel:+639911425344">+63 991 142 5344</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 ASpace (Aspacer). All rights reserved. | Exclusively serving Albay, Philippines.</p>
+  </div>
+</footer>
+
+
+<!-- LOGIN / SIGNUP MODAL -->
+<div class="modal-overlay" id="loginModal" onclick="handleOverlayClick(event,'loginModal')">
+  <div class="modal-box auth-box">
+    <button class="modal-x" onclick="closeModal('loginModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div class="auth-role-tabs">
+      <button class="art active" id="roleTabTenant" onclick="setRole('tenant')"><i class="fa-solid fa-graduation-cap"></i> Tenant</button>
+      <button class="art" id="roleTabLandlord" onclick="setRole('landlord')"><i class="fa-solid fa-house"></i> Landlord</button>
+    </div>
+    <div class="auth-mode-tabs">
+      <button class="amt active" id="modeTabLogin" onclick="setMode('login')">Log In</button>
+      <button class="amt" id="modeTabSignup" onclick="setMode('signup')">Sign Up</button>
+    </div>
+    <form class="auth-form" id="form-login" onsubmit="handleLogin(event)">
+      <h3 id="loginTitle">Tenant Login</h3>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@email.com" required/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Password" required/></div>
+      <a href="#" class="forgot-link" onclick="closeModal('loginModal');openModal('forgotModal')">Forgot Password?</a>
+      <button type="submit" class="btn-primary full-w"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
+    </form>
+    <form class="auth-form hidden" id="form-tenant-signup" onsubmit="handleSignup(event,'tenant')">
+      <h3>Create Tenant Account</h3>
+      <div class="form-2col">
+        <div class="form-group"><label>First Name *</label><input type="text" placeholder="Juan" required/></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" placeholder="Dela Cruz" required/></div>
+      </div>
+      <div class="form-group"><label>Mobile Number *</label><input type="tel" placeholder="+63 9XX XXX XXXX" required/></div>
+      <div class="form-group"><label>Email Address *</label><input type="email" placeholder="you@email.com" required/></div>
+      <div class="form-group"><label>Password *</label><input type="password" placeholder="At least 8 characters" required/></div>
+      <div class="form-group"><label>Retype Password *</label><input type="password" placeholder="Re-enter password" required/></div>
+      <div class="form-group">
+  <label>Gender *</label>
+  <select required>
+    <option value="">Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Prefer not to say">Prefer not to say</option>
+  </select>
+</div>
+<div class="form-group">
+  <label>Valid Government ID *</label>
+  <div class="upload-box" onclick="document.getElementById('tenantIdUpload').click()">
+    <i class="fa-solid fa-id-card"></i>
+    <span>Click to upload ID <small>(JPG, PNG, PDF — max 5MB)</small></span>
+    <input type="file" id="tenantIdUpload" accept="image/*,.pdf" style="display:none" onchange="previewUpload(this,'tenantIdPreview')" required/>
+  </div>
+  <div class="upload-preview" id="tenantIdPreview"></div>
+</div>
+      <label class="agree-cb"><input type="checkbox" required/> I agree to the <a href="#" onclick="showPage('terms');closeModal('loginModal')">Terms of Service</a> and <a href="#" onclick="showPage('privacy');closeModal('loginModal')">Privacy Policy</a></label>
+      <button type="submit" class="btn-primary full-w"><i class="fa-solid fa-user-plus"></i> Create Account</button>
+    </form>
+    <form class="auth-form hidden" id="form-landlord-signup" onsubmit="handleSignup(event,'landlord')">
+      <h3>Create Landlord Account</h3>
+      <div class="form-group"><label>Public Name / Business Name *</label><input type="text" placeholder="e.g. Juan Dela Cruz / JDC Rentals" required/></div>
+      <div class="form-group"><label>Contact Email Address *</label><input type="email" placeholder="you@email.com" required/></div>
+      <div class="form-group"><label>Contact Mobile Number *</label><input type="tel" placeholder="+63 9XX XXX XXXX" required/></div>
+      <div class="form-group"><label>Role / Persona *</label><select required><option value="">Select your role</option><option>Individual Landlord</option><option>Property Manager</option><option>Real Estate Agent</option><option>Student (sub-letting)</option><option>Freelancer / Home-based</option><option>Corporate Employee</option><option>Other</option></select></div>
+      <div class="form-group"><label>Password *</label><input type="password" placeholder="At least 8 characters" required/></div>
+      <div class="form-group"><label>Retype Password *</label><input type="password" placeholder="Re-enter password" required/></div>
+      <div class="form-section-divider">
+  <i class="fa-solid fa-file-shield"></i> Identity &amp; Business Documents
+</div>
+
+<div class="form-group">
+  <label>Valid Government ID *</label>
+  <div class="upload-box" onclick="document.getElementById('landlordIdUpload').click()">
+    <i class="fa-solid fa-id-card"></i>
+    <span>Click to upload ID <small>(JPG, PNG, PDF — max 5MB)</small></span>
+    <input type="file" id="landlordIdUpload" accept="image/*,.pdf" style="display:none" onchange="previewUpload(this,'landlordIdPreview')" required/>
+  </div>
+  <div class="upload-preview" id="landlordIdPreview"></div>
+</div>
+
+<div class="form-group">
+  <label>BIR Certificate of Registration *</label>
+  <div class="upload-box" onclick="document.getElementById('birUpload').click()">
+    <i class="fa-solid fa-file-invoice"></i>
+    <span>Click to upload BIR Certificate <small>(JPG, PNG, PDF — max 5MB)</small></span>
+    <input type="file" id="birUpload" accept="image/*,.pdf" style="display:none" onchange="previewUpload(this,'birPreview')" required/>
+  </div>
+  <div class="upload-preview" id="birPreview"></div>
+</div>
+
+<div class="form-group">
+  <label>Business Permit *</label>
+  <div class="upload-box" onclick="document.getElementById('businessPermitUpload').click()">
+    <i class="fa-solid fa-building-columns"></i>
+    <span>Click to upload Business Permit <small>(JPG, PNG, PDF — max 5MB)</small></span>
+    <input type="file" id="businessPermitUpload" accept="image/*,.pdf" style="display:none" onchange="previewUpload(this,'businessPermitPreview')" required/>
+  </div>
+  <div class="upload-preview" id="businessPermitPreview"></div>
+</div>
+
+<div class="form-group">
+  <label>Sanitary Permit *</label>
+  <div class="upload-box" onclick="document.getElementById('sanitaryPermitUpload').click()">
+    <i class="fa-solid fa-shield-virus"></i>
+    <span>Click to upload Sanitary Permit <small>(JPG, PNG, PDF — max 5MB)</small></span>
+    <input type="file" id="sanitaryPermitUpload" accept="image/*,.pdf" style="display:none" onchange="previewUpload(this,'sanitaryPermitPreview')" required/>
+  </div>
+  <div class="upload-preview" id="sanitaryPermitPreview"></div>
+</div>
+      <label class="agree-cb"><input type="checkbox" required/> I agree to the <a href="#" onclick="showPage('terms');closeModal('loginModal')">Terms of Service</a> and <a href="#" onclick="showPage('privacy');closeModal('loginModal')">Privacy Policy</a></label>
+      <button type="submit" class="btn-primary full-w"><i class="fa-solid fa-house-circle-check"></i> Create Landlord Account</button>
+    </form>
+  </div>
+</div>
+
+<!-- LISTING DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal" onclick="handleOverlayClick(event,'detailModal')">
+  <div class="modal-box detail-box">
+    <button class="modal-x" onclick="closeModal('detailModal')"><i class="fa-solid fa-xmark"></i></button>
+    <img id="dm-img" src="" alt="" class="dm-img"/>
+    <div class="dm-body">
+      <div class="dm-top">
+        <span class="dm-badge" id="dm-badge"></span>
+        <span class="dm-city" id="dm-city"></span>
+        <span class="dm-gender hidden" id="dm-gender"></span>
+      </div>
+      <h2 id="dm-title"></h2>
+      <div class="dm-price-row">
+        <div class="dm-price" id="dm-price"></div>
+        <div class="dm-occupancy" id="dm-occupancy"></div>
+      </div>
+      <p id="dm-desc"></p>
+      <div class="dm-section-label"><i class="fa-solid fa-star"></i> Amenities &amp; Features</div>
+      <div class="dm-amenities" id="dm-amenities"></div>
+      <div class="dm-section-label"><i class="fa-solid fa-circle-user"></i> Landlord Details</div>
+      <div class="dm-landlord" id="dm-landlord"></div>
+      <div class="dm-actions">
+        <button class="btn-primary" onclick="closeModal('detailModal');openModal('loginModal')"><i class="fa-regular fa-message"></i> Inquire Now</button>
+        <button class="btn-outline dm-save-btn" id="dmSaveBtn" onclick="toggleDetailFav(this)"><i class="fa-regular fa-heart"></i> Save Listing</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div class="modal-overlay" id="forgotModal" onclick="handleOverlayClick(event,'forgotModal')">
+  <div class="modal-box forgot-box">
+    <button class="modal-x" onclick="closeModal('forgotModal')"><i class="fa-solid fa-xmark"></i></button>
+    <div class="forgot-ico"><i class="fa-solid fa-lock"></i></div>
+    <h2 class="forgot-title">Reset Password</h2>
+    <p class="forgot-sub">Enter your email address and we will send you a link to reset your password.</p>
+    <form onsubmit="handleForgotPassword(event)">
+      <div class="form-group"><label>Email Address</label><input type="email" id="forgotEmail" placeholder="you@email.com" required/></div>
+      <button type="submit" class="btn-primary full-w"><i class="fa-solid fa-paper-plane"></i> Send Reset Link</button>
+      <p style="text-align:center;margin-top:1rem;font-size:.82rem;color:var(--text-muted)">
+        <a href="#" onclick="closeModal('forgotModal');openModal('loginModal')" style="color:var(--blue);font-weight:500"><i class="fa-solid fa-arrow-left" style="font-size:.75rem;margin-right:.3rem"></i>Back to Login</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
