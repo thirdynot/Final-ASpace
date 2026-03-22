@@ -262,7 +262,7 @@ i[class*="fa-"]{line-height:1;vertical-align:middle;flex-shrink:0}
 .hiw-steps{display:flex;flex-direction:column;gap:1.5rem;max-width:780px;margin:0 auto}
 .hiw-step{display:flex;align-items:flex-start;gap:1.5rem;background:#fff;border-radius:var(--radius-lg);padding:2rem;border:1px solid var(--gray-100);box-shadow:var(--shadow-sm);transition:transform var(--t),box-shadow var(--t)}
 .hiw-step:hover{transform:translateX(4px);box-shadow:var(--shadow-md)}
-.hiw-step-num{font-size:2.5rem;font-weight:800;color:var(--blue-pale);line-height:1;min-width:56px;text-align:center;flex-shrink:0}
+.hiw-step-num{font-size:2.5rem;font-weight:800;color:#68b8f9;line-height:1;min-width:56px;text-align:center;flex-shrink:0}
 .hiw-step-ico{width:48px;height:48px;border-radius:12px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hiw-step-ico i{font-size:1.25rem}
 .hiw-step-body h3{font-size:1.1rem;font-weight:700;margin-bottom:.45rem}
