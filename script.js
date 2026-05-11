@@ -1,12 +1,3 @@
-/* ============================================================
-   ASPACE — script.js
-   Matches: index.html with Font Awesome 6.5, showPage() routing,
-   openDetail(), advanced filter panel, gender filter, amenities grid
-   ============================================================ */
-
-/* ==========================================================
-   LISTINGS DATA
-   ========================================================== */
 const listings = [
   {
     id: 1,
@@ -179,9 +170,7 @@ let currentRole      = 'tenant';
 let currentMode      = 'login';
 let filterPanelOpen  = false;
 
-/* ==========================================================
-   INIT
-   ========================================================== */
+
 document.addEventListener('DOMContentLoaded', () => {
   renderListings(true);
   updateResultsBar('', '', [], '');
@@ -192,9 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initOverviewActivity();
 });
 
-/* ==========================================================
-   PAGE ROUTING
-   ========================================================== */
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const t = document.getElementById('page-' + pageId);
@@ -212,9 +198,7 @@ function scrollToId(id) {
   }, 100);
 }
 
-/* ==========================================================
-   NAVBAR
-   ========================================================== */
+
 function toggleNav() {
   document.getElementById('navLinks').classList.toggle('open');
   document.getElementById('hamburger').classList.toggle('open');
@@ -226,9 +210,6 @@ function initNavbarScroll() {
   window.addEventListener('scroll', () => nb.classList.toggle('scrolled', window.scrollY > 10), { passive: true });
 }
 
-/* ==========================================================
-   ADVANCED FILTER PANEL
-   ========================================================== */
 function toggleAdvancedFilters() {
   filterPanelOpen = !filterPanelOpen;
   const panel = document.getElementById('advFilterPanel');
@@ -288,9 +269,6 @@ function clearAdvancedFilters() {
   showToast('Advanced filters reset.', 'fa-rotate-left');
 }
 
-/* ==========================================================
-   FILTER PILLS
-   ========================================================== */
 function initFilterPills() {
   document.querySelectorAll('.fp').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -302,9 +280,7 @@ function initFilterPills() {
   });
 }
 
-/* ==========================================================
-   APPLY FILTERS
-   ========================================================== */
+
 function applyFilters() {
   const query     = (document.getElementById('heroSearch')?.value || '').toLowerCase().trim();
   const type      = document.getElementById('heroType')?.value  || '';
@@ -388,9 +364,6 @@ function clearSearch() {
   showToast('All filters cleared.', 'fa-xmark');
 }
 
-/* ==========================================================
-   SEARCH
-   ========================================================== */
 function doHeroSearch() {
   applyFilters();
   showPage('home');
@@ -413,9 +386,7 @@ function initSearchEnter() {
   if (si) si.addEventListener('keydown', e => { if (e.key === 'Enter') doHeroSearch(); });
 }
 
-/* ==========================================================
-   RENDER LISTINGS
-   ========================================================== */
+
 function renderListings(reset = false) {
   const grid = document.getElementById('listingsGrid');
   const btn  = document.getElementById('loadMoreBtn');
@@ -501,9 +472,7 @@ function createCard(l, animIndex) {
   return card;
 }
 
-/* ==========================================================
-   FAVOURITE TOGGLE
-   ========================================================== */
+
 function toggleFav(btn, e) {
   e.stopPropagation();
   const active = btn.classList.toggle('active');
@@ -512,9 +481,7 @@ function toggleFav(btn, e) {
   showToast(active ? 'Saved to favourites!' : 'Removed from favourites.', active ? 'fa-heart' : 'fa-heart-crack');
 }
 
-/* ==========================================================
-   DETAIL MODAL  ← THIS IS THE KEY FUNCTION FOR THE VIEW BUTTON
-   ========================================================== */
+
 function openDetail(id) {
   const l = listings.find(x => x.id === id);
   if (!l) return;
@@ -596,9 +563,7 @@ function openDetail(id) {
   openModal('detailModal');
 }
 
-/* ==========================================================
-   AUTH MODAL
-   ========================================================== */
+
 function setRole(role) {
   currentRole = role;
   document.getElementById('roleTabTenant').classList.toggle('active', role === 'tenant');
@@ -664,9 +629,7 @@ function handleForgotPassword(e) {
   showToast(`Reset link sent to ${email}`, 'fa-envelope');
 }
 
-/* ==========================================================
-   DASHBOARD PANELS
-   ========================================================== */
+
 function openPanel(panelId, btn) {
   document.querySelectorAll('.d-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.dn-btn').forEach(b => b.classList.remove('active'));
@@ -696,9 +659,7 @@ function previewPhotos(e) {
   showToast(`${Math.min(e.target.files.length, 10)} photo(s) selected.`, 'fa-camera');
 }
 
-/* ==========================================================
-   MODAL HELPERS
-   ========================================================== */
+
 function openModal(id)  {
   const el = document.getElementById(id);
   if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -717,9 +678,7 @@ document.addEventListener('keydown', e => {
   });
 });
 
-/* ==========================================================
-   TOAST
-   ========================================================== */
+
 let toastTimer;
 function showToast(msg, iconName = 'circle-info', duration = 3200) {
   const t = document.getElementById('toast');
@@ -730,9 +689,6 @@ function showToast(msg, iconName = 'circle-info', duration = 3200) {
   toastTimer = setTimeout(() => t.classList.remove('show'), duration);
 }
 
-/* ==========================================================
-   BACK TO TOP
-   ========================================================== */
 function initBackToTop() {
   const btn = document.createElement('button');
   btn.className = 'back-to-top';
@@ -744,9 +700,7 @@ function initBackToTop() {
     btn.classList.toggle('visible', window.scrollY > 400), { passive: true });
 }
 
-/* ==========================================================
-   OVERVIEW ACTIVITY FEED
-   ========================================================== */
+
 function initOverviewActivity() {
   const panel = document.getElementById('panel-overview');
   if (!panel) return;
@@ -810,9 +764,7 @@ function previewUpload(input, previewId) {
 
   showToast(`"${file.name}" uploaded successfully.`, 'fa-circle-check');
 }
-/* ==========================================================
-   SCROLL REVEAL
-   ========================================================== */
+
 (function initScrollReveal() {
   const sel = '.l-card,.why-card,.step-item,.hiw-step,.ls-item,.city-card,.legal-block,.help-card,.mv-card,.tcard';
   const obs = new IntersectionObserver(entries => {
